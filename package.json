@@ -8,15 +8,15 @@
     "preview": "astro preview"
   },
   "dependencies": {
-    "@astrojs/markdown-remark": "^7.3.1",
+    "@astrojs/markdown-remark": "^7.3.5",
     "@astrojs/sitemap": "^3.7.4",
     "@tailwindcss/vite": "^4.3.3",
-    "astro": "^7.3.5",
+    "astro": "^7.4.4",
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.10",
-    "playwright": "^1.63.0",
+    "@astrojs/check": "^0.9.12",
+    "playwright": "^1.64.1",
     "typescript": "6"
   },
   "packageManager": "bun@1.4.2"
