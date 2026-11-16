@@ -24,6 +24,9 @@ PRODUCT.md
 # plans
 .archived_plans/
 
+# content
+FILES.md
+
 # writing
 PROSE.md
 prose-preflight.yaml

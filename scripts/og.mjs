@@ -10,8 +10,8 @@ mkdirSync(OUT, { recursive: true })
 
 // blue -> magenta -> amber, the footer sweep from src/utils/grads.ts
 const bar = [
-  '(', '-size', `${BAR}x600`, 'gradient:#187caa-#f92f8b', '-rotate', '90', ')',
-  '(', '-size', `${BAR}x600`, 'gradient:#f92f8b-#fcbe37', '-rotate', '90', ')',
+  '(', '-size', `${BAR}x600`, 'gradient:#187caa-#f92f8b', '-rotate', '-90', ')',
+  '(', '-size', `${BAR}x600`, 'gradient:#f92f8b-#fcbe37', '-rotate', '-90', ')',
   '+append',
 ]
 
