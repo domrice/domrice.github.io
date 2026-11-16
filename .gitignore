@@ -5,11 +5,12 @@ dist
 *.log
 
 # video sources (ProRes, or the best encode that exists) live in masters/<project>/,
-# outside public/ so they never ship; scripts/video.mjs encodes them into public/imgs/
+# outside public/ so they never ship; scripts/video.mjs encodes them into public/video/
 masters/
 
 # local Claude Code instructions
 CLAUDE.md
+AGENTS.md
 .claude/
 
 # impeccable skill
@@ -22,3 +23,7 @@ PRODUCT.md
 
 # plans
 .archived_plans/
+
+# writing
+PROSE.md
+prose-preflight.yaml

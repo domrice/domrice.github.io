@@ -2,9 +2,8 @@
 title: Reversible Designs
 description: >-
   Reversible Designs was a seminar week taught at ETH Zürich that explored reversible design and hands-on construction within ETH Hangar in Dübendorf, CH.
-order: 6
-category: design
-grad: 1
+order: 1
+category: architecture
 thumb: /imgs/2025-10_reversible_designs/00_rd_thumb
 hero:
   src: /imgs/2025-10_reversible_designs/rd_09
@@ -91,4 +90,4 @@ credits:
       - Margaryta Zimarina
 ---
 
-**Reversible Designs** was a seminar week taught at ETH Zürich that explored reversible design and hands-on construction within ETH Hangar in Dübendorf, CH. The site’s asphalted forecourt, formerly used for aircraft, currently lacked seating and shade. In dialogue with the students working at ETH Hangar in mobility, robotics, energy, and aerospace, participants developed modular furniture systems tailored to the diverse needs of their users. Working with recycled and leftover materials, the workshop introduced principles of furniture design, upcycling, and digital fabrication. Participants used the Shaper Origin hand-held CNC router to develop contemporary, reversible timber joints and investigate how design-for-disassembly can extend the life of materials and objects. The seminar week culminated in the full-scale production of several furniture objects.
+**Reversible Designs** was a seminar week taught at ETH Zürich that explored reversible design and hands-on construction within ETH Hangar in Dübendorf, CH. The site’s asphalted forecourt, formerly used for aircraft, lacked seating and shade. In dialogue with the students working at ETH Hangar in mobility, robotics, energy, and aerospace, participants developed modular furniture systems tailored to the diverse needs of their users. Working with recycled and leftover materials, the workshop introduced principles of furniture design, upcycling, and digital fabrication. Participants used the Shaper Origin hand-held CNC router to develop contemporary, reversible timber joints and investigate how design-for-disassembly can extend the life of materials and objects. The seminar week culminated in the full-scale production of several furniture objects.

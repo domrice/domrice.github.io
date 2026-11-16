@@ -7,7 +7,7 @@ authors:
 links:
   - {
       label: "conference paper",
-      href: "https://doi.org/10.3929/ethz-b-000643632",
+      href: "https://doi.org/10.52842/conf.acadia.2023.1.154",
     }
 bibtex: |
   @inproceedings{reisachOffcutTalesDocumenting2023,
@@ -21,5 +21,5 @@ bibtex: |
     pages = {154--159},
     publisher = {Association for Computer Aided Design in Architecture (ACADIA)},
     address = {Denver},
-    doi = {10.3929/ethz-b-000643632},
+    doi = {10.52842/conf.acadia.2023.1.154},
   }

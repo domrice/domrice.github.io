@@ -1,6 +1,6 @@
 ---
 // one glyph doing two jobs; the label has to name the destination the glyph can't
-const labels = { "/": "back to home", "/work": "back to selected work" };
+const labels = { "/": "back to home", "/work": "back to selected work", "/about": "back to about" };
 
 type Props = { grad: string; to?: keyof typeof labels };
 const { grad, to = "/" } = Astro.props;

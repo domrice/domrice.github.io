@@ -2,9 +2,8 @@
 title: CircÛbi
 description: >-
   In summer 2022, three temporary wooden buildings — the Huber Pavilions — had to make way for a new building on the ETH Hönggerberg campus.
-order: 4
-category: design
-grad: 3
+order: 2
+category: architecture
 thumb: /imgs/2023-06_circubi/hr0_dr_thumb
 hero:
   src: /imgs/2023-06_circubi/hr1_dr

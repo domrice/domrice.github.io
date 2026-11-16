@@ -1,11 +1,13 @@
 import { defineCollection } from 'astro:content'
 import { glob } from 'astro/loaders'
 import { z } from 'astro/zod'
+import { roles } from './utils/credits'
+import { stages } from './utils/pitchText'
 
 // One Markdown file per project in content/work/. Body = description prose only;
 // everything structured (meta line, credits, hero, gallery) lives in frontmatter.
 // stills by extensionless /imgs/... basename (source in src/assets/imgs, see utils/images.ts),
-// clips by their /imgs/....webm path (public/imgs, see scripts/video.mjs)
+// clips by their /video/....webm path (public/video, see scripts/video.mjs)
 const item = z.object({
   src: z.string(),
   portrait: z.boolean().optional(),
@@ -13,9 +15,10 @@ const item = z.object({
   alt: z.string().optional(), // what the image shows; a credit is attribution, not a description
 })
 
-// pitch: a plain string, or an object for portrait/credited items. Alt may be absent:
-// a pitch `credit` is a descriptive caption, announced with the image already
-const media = z.array(z.union([z.string().transform((src) => ({ src })), item]))
+// pitch: alt may be absent, a pitch `credit` is a descriptive caption, announced with
+// the image already. `stage` files the item under one step of the pipeline; untagged
+// items lead the project
+const media = z.array(item.extend({ stage: z.enum(stages).optional() }))
 
 // work: alt is required, so a missing description fails the build
 const described = item.extend({ alt: z.string().min(1) })
@@ -29,23 +32,37 @@ const person = z.union([
   z.object({ name: z.string(), url: z.string().optional() }),
 ])
 
+// a work page with no grid tile (photography): reached from /about, closes there
+const page = z.object({
+  title: z.string(),
+  description: z.string().optional(), // meta/og description; first sentence of the body
+  thumb: z.string(), // grid card image: basename without extension, like every still
+  grad,
+  category: z.undefined().optional(),
+  hero: described.optional(), // top image basename, or a .webm
+  media: z.array(described).optional(), // gallery below the text
+  type: z.string().optional(), // "Design–Build Project"
+  year: z.number().optional(),
+  place: z.string().optional(), // "ETH Zurich, D-ARCH & D-BAUG"
+  credits: z.array(z.object({ role: z.enum(roles), people: z.array(person) })).default([]),
+})
+
+// a grid tile: its section, its place in it, and the type · year line it shows.
+// grad is derived, not authored: it cycles 0–3 by order, restarting per category
+const tile = page
+  .omit({ grad: true })
+  .extend({
+    category: z.enum(['tools', 'architecture']),
+    order: z.number().int().min(1),
+    type: z.string(),
+    year: z.number(),
+  })
+  .transform((d) => ({ ...d, grad: ((d.order - 1) % 4) as 0 | 1 | 2 | 3 }))
+
 export const collections = {
   work: defineCollection({
     loader: glob({ base: './content/work', pattern: '*.md' }),
-    schema: z.object({
-      title: z.string(),
-      description: z.string().optional(), // meta/og description; first sentence of the body
-      order: z.number(),
-      thumb: z.string(), // grid card image: basename without extension, like every still
-      grad,
-      category: z.enum(['computation', 'design', 'misc']), // grid section; order within it comes from `order`
-      hero: described.optional(), // top image basename, or a .webm
-      media: z.array(described).optional(), // gallery below the text
-      type: z.string().optional(), // "Design–Build Project"
-      year: z.number().optional(),
-      place: z.string().optional(), // "ETH Zurich, D-ARCH & D-BAUG"
-      credits: z.array(z.object({ role: z.string(), people: z.array(person) })).optional(),
-    }),
+    schema: z.discriminatedUnion('category', [tile, page]),
   }),
 
   // One Markdown file per pitch in content/pitch/. Route = /pitch/<filename>.
@@ -56,10 +73,11 @@ export const collections = {
     schema: z.object({
       lang: z.enum(['en', 'de']).default('en'), // picks the fixed strings in utils/pitchText.ts
       grad: grad.default(0),
-      recipient: z.string().optional(), // document title; falls back to the slug
-      intro: z.string(), // "about me" blurb, markdown
+      recipient: z.string(), // named on the first screen and in the document title
+      intro: z.string(), // the claim, in the recipient's language, markdown
       projects: z.array(z.object({ title: z.string(), blurb: z.string(), media })),
       closing: z.object({ title: z.string(), text: z.string() }).optional(),
+      ask: z.string(), // the one direct ask the page ends on, plain text
     }),
   }),
 

@@ -1,7 +1,5 @@
 ---
 title: Photography
-order: 11
-category: misc
 grad: 2
 thumb: /imgs/0000-00_photography/p0_dr_thumb
 hero:

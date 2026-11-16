@@ -9,18 +9,22 @@ const { base, alt, class: className } = Astro.props;
 // `poster` takes one URL, no srcset: 1280 matches the 720p clips (sharp never
 // upscales the smaller ones). AVIF only — a browser without it shows no poster
 // until the clip plays, rather than every browser paying for a JPG.
-const poster = await getImage({ src: still(`${base}_poster`), width: 1280, format: "avif" });
+const frame = still(`${base}_poster`);
+const poster = await getImage({ src: frame.src, width: 1280, format: "avif" });
+const av1 = 'video/webm; codecs="av01.0.05M.08"';
 ---
 
 {/* controls: a loop >5s needs a stop for everyone (WCAG 2.2.2); nodownload: All
     Rights Reserved; no PiP: its button sits where the credit lives.
-    all clips are 16:9 after SAR correction; fixes layout before metadata loads */}
+    width/height: the poster is the clip's first frame, so its aspect reserves the
+    clip's space before metadata loads, portrait or landscape */}
 <video
   data-autoplay
   aria-label={alt || undefined}
   poster={poster.src}
-  width="16"
-  height="9"
+  style={frame.style}
+  width={frame.src.width}
+  height={frame.src.height}
   preload="none"
   controls
   controlslist="nodownload"
@@ -35,8 +39,12 @@ const poster = await getImage({ src: still(`${base}_poster`), width: 1280, forma
 >
   {/* Apple ships no software AV1 decoder, so Safari before M3/A17 Pro needs h264.
       The codecs string lets it say no up front instead of fetching a webm it then
-      cannot decode: AV1 main profile, level 3.1 (720p30), 8-bit — scripts/video.mjs */}
-  <source src={`${base}.webm`} type='video/webm; codecs="av01.0.05M.08"' />
+      cannot decode: AV1 main profile, level 3.1 (720p30), 8-bit — scripts/video.mjs.
+      Phones take the 480p `_sm` pair; a browser that ignores `media` here
+      (before Chrome/Firefox 120) takes it too, just softer */}
+  <source media="(max-width: 600px)" src={`${base}_sm.webm`} type={av1} />
+  <source media="(max-width: 600px)" src={`${base}_sm.mp4`} type="video/mp4" />
+  <source src={`${base}.webm`} type={av1} />
   <source src={`${base}.mp4`} type="video/mp4" />
 </video>
 

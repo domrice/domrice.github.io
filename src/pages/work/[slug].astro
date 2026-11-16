@@ -5,6 +5,7 @@ import CloseLink from "../../components/CloseLink.astro";
 import MediaFigure from "../../components/MediaFigure.astro";
 import { external } from "../../utils/external";
 import { grads, prose, proseGrads } from "../../utils/grads";
+import { bands } from "../../utils/credits";
 
 export async function getStaticPaths() {
   return (await getCollection("work")).map((entry) => ({
@@ -19,6 +20,11 @@ const doc = entry.data;
 const { Content } = await render(entry);
 
 const meta = [doc.type, doc.place, doc.year].filter(Boolean);
+
+// credits regrouped by band (utils/credits.ts), empty bands dropped
+const groups = bands
+  .map((band) => band.flatMap((role) => doc.credits.filter((c) => c.role === role)))
+  .filter((g) => g.length);
 
 // titles are authored lowercase in frontmatter, matching the Lowercase Rule.
 // description falls back to the meta line for the one project with no prose.
@@ -43,7 +49,8 @@ const meta = [doc.type, doc.place, doc.year].filter(Boolean);
         {doc.title}
       </h1>
     </div>
-    <CloseLink to="/work" grad={grads[doc.grad]} />
+    {/* tiles close to the grid; a page (content.config.ts) is reached from /about */}
+    <CloseLink to={doc.category ? "/work" : "/about"} grad={grads[doc.grad]} />
 
     <main
       class="flex flex-col gap-8 lg:gap-12 mx-auto max-w-5xl pt-20 lg:pt-36 pb-6 px-6 lg:px-12"
@@ -71,28 +78,34 @@ const meta = [doc.type, doc.place, doc.year].filter(Boolean);
         }
 
         {
-          doc.credits && (
-            <dl class="grid gap-y-4 md:grid-cols-[auto_1fr] md:gap-x-8 md:gap-y-2 text-sm border-t border-white/10 pt-6">
-              {doc.credits.map((c) => (
-                <div class="grid gap-2 md:contents">
-                  {/* the quietest tier in the system: /60 measures 7.0:1 on black and
-                       ~4.7:1 over the scrim, so a role label stays readable at 14px */}
-                  <dt class="text-white/60">{c.role}</dt>
-                  <dd class="text-white/80">
-                    {c.people.map((p, i) => (
-                      <>
-                        {i > 0 && <span>, </span>}
-                        {p.url ? (
-                          <a href={p.url} {...external} class:list={["link", grads[doc.grad]]}>{p.name}</a>
-                        ) : (
-                          p.name
-                        )}
-                      </>
-                    ))}
-                  </dd>
-                </div>
+          !!groups.length && (
+            /* one dl per band, split by the same hairline and 6 spacing that splits
+               credits from prose; subgrid shares the label column so all names align */
+            <div class="grid gap-y-6 md:grid-cols-[auto_1fr] md:gap-x-8 text-sm border-t border-white/10 pt-6">
+              {groups.map((g) => (
+                <dl class="grid gap-y-4 md:col-span-2 md:grid-cols-subgrid md:gap-y-2 not-first:border-t not-first:border-white/10 not-first:pt-6">
+                  {g.map((c) => (
+                    <div class="grid gap-2 md:contents">
+                      {/* the quietest tier in the system: /60 measures 7.0:1 on black and
+                           ~4.7:1 over the scrim, so a role label stays readable at 14px */}
+                      <dt class="text-white/60">{c.role}</dt>
+                      <dd class="text-white/80">
+                        {c.people.map((p, i) => (
+                          <>
+                            {i > 0 && <span>, </span>}
+                            {p.url ? (
+                              <a href={p.url} {...external} class:list={["link", grads[doc.grad]]}>{p.name}</a>
+                            ) : (
+                              p.name
+                            )}
+                          </>
+                        ))}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
               ))}
-            </dl>
+            </div>
           )
         }
       </div>

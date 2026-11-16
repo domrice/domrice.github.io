@@ -1,76 +1,70 @@
 ---
-import { getCollection, type CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
 import { Picture } from "astro:assets";
 import Base from "../../layouts/Base.astro";
 import CloseLink from "../../components/CloseLink.astro";
 import { grads } from "../../utils/grads";
 import { picture, still } from "../../utils/images";
 
-// section order + display labels, one per category in the schema; an empty one renders nothing
-const labels = {
-  computation: "computation",
-  design: "architecture & design",
-  misc: "misc",
-} satisfies Record<CollectionEntry<"work">["data"]["category"], string>;
+// tiles only: narrowing on `category` types order, type and year as present
+const tiles = (await getCollection("work"))
+  .flatMap(({ id, data }) => (data.category ? [{ id, ...data }] : []))
+  .toSorted((a, b) => a.order - b.order);
 
-const byLabel = Object.groupBy(
-  (await getCollection("work")).toSorted((a, b) => a.data.order - b.data.order),
-  (i) => labels[i.data.category],
-);
-const grouped = Object.values(labels).flatMap((label) => byLabel[label] ? [{ label, items: byLabel[label] }] : []);
+// size is rank: current work three to a row from `lg`, the architecture past four.
+// The current work needs no label (it is what I do). Full class strings so Tailwind
+// sees them; `vw` follows `cols`. The Record type fails on a missing category.
+const config: Record<(typeof tiles)[number]["category"], { label?: string; cols: string; vw: number }> = {
+  tools: { cols: "lg:grid-cols-3", vw: 33 },
+  architecture: { label: "previously · architecture & design", cols: "lg:grid-cols-4", vw: 25 },
+};
+
+const sections = Object.entries(config)
+  .map(([category, s]) => ({ ...s, items: tiles.filter((t) => t.category === category) }));
 ---
 
 <Base
   title="selected work"
-  description="Selected projects across computation, architecture & design — from material capture and algorithmic design to robotic fabrication."
+  description="Selected software, from computer vision and geometry to robotic fabrication, and earlier work in architecture and design."
 >
   <div class="relative min-h-screen w-full">
     <CloseLink grad={grads[2]} />
     <main class="mx-auto max-w-[120rem] flex flex-col gap-10 lg:gap-16 pt-20 lg:pt-36 pb-6 px-6 lg:px-12">
-      {/* the section labels are the visible headings; the page's own title lives in the
-           tab and here, so heading navigation starts at a top level */}
+      {/* the section labels are the visible headings, so heading navigation needs a top level */}
       <h1 class="sr-only">selected work</h1>
       {
-        grouped.map((g) => (
-          <section class="flex flex-col gap-3">
-            <h2 class="lowercase text-2xl lg:text-3xl">{g.label}</h2>
-            <div class="grid grid-flow-dense grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 lowercase">
-              {g.items.map(({ id, data: item }) => (
-                <a
-                  href={`/work/${id}`}
-                  class="group relative block border border-solid border-black aspect-square overflow-hidden focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-white"
-                >
-                  {/* the .jpg fallback is not cosmetic here: the tile label is hidden at rest on
-                       pointer devices, so on a browser without AVIF a bare .avif leaves a blank
-                       square with no text and no route to the project. `picture` emits both from
-                       the one source. `contents` lets the <img> take the tile's own absolute
-                       positioning — <picture> is a box the layout must not see. sizes: one column,
-                       then 2 at md, 3 at lg, 4 at 2xl. */}
-                  <Picture
-                    {...picture}
-                    src={still(item.thumb)}
-                    sizes="(min-width: 1536px) 25vw, (min-width: 900px) 33vw, (min-width: 600px) 50vw, 100vw"
-                    alt=""
-                    pictureAttributes={{ class: "contents" }}
-                    class="absolute inset-0 object-cover w-full h-full transition-transform duration-500 ease-out group-hover:scale-110 group-focus-visible:scale-110 motion-reduce:transition-none motion-reduce:group-hover:scale-100 motion-reduce:group-focus-visible:scale-100"
-                  />
-                  {/* the project's chromatic key, as the pointer reward. Sits beneath the scrim so
-                       centred white type clears the amber stops. opacity is what fades:
-                       background-image cannot be transitioned. */}
-                  <div
-                    aria-hidden="true"
-                    class:list={["absolute inset-0 opacity-0 transition-opacity duration-500 ease-out bg-linear-to-b lg:bg-linear-to-r group-hover:opacity-75 group-focus-visible:opacity-75 group-active:opacity-75 motion-reduce:transition-none", grads[item.grad]]}
-                  />
-                  {/* the tile names itself, centred. hidden until hover on pointer devices; always
-                       visible on touch, where no hover exists — same mechanism as MediaFigure's
-                       credits. The radial scrim backs the type without veiling the thumbnail's edges,
-                       and is what keeps white legible over the amber gradients. */}
-                  <span class="absolute inset-0 flex items-center justify-center p-4 text-center text-2xl text-white bg-radial from-black/50 via-black/25 to-transparent transition-opacity duration-500 ease-out [@media(hover:hover)]:opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 motion-reduce:transition-none">
-                    {item.title}
-                  </span>
-                </a>
-              ))}
-            </div>
+        sections.map((s) => (
+          <section class:list={["grid grid-cols-1 md:grid-cols-2", s.cols]}>
+            {s.label && <h2 class="col-span-full pb-3 lowercase text-2xl lg:text-3xl">{s.label}</h2>}
+            {s.items.map(({ id, ...item }) => (
+              <a
+                href={`/work/${id}`}
+                class="group relative block border border-solid border-black aspect-square overflow-hidden lowercase focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-white"
+              >
+                {/* .jpg fallback matters: the title is hidden at rest; `contents` keeps <picture> out of layout */}
+                <Picture
+                  {...picture}
+                  {...still(item.thumb)}
+                  sizes={`(min-width: 900px) ${s.vw}vw, (min-width: 600px) 50vw, 100vw`}
+                  alt=""
+                  pictureAttributes={{ class: "contents" }}
+                  class="absolute inset-0 object-cover w-full h-full group-zoom"
+                />
+                {/* fades by opacity: background-image cannot be transitioned */}
+                <div
+                  aria-hidden="true"
+                  class:list={["absolute inset-0 opacity-0 transition-opacity duration-500 ease-out bg-linear-to-b lg:bg-linear-to-r group-hover:opacity-75 group-focus-visible:opacity-75 group-active:opacity-75 motion-reduce:transition-none", grads[item.grad]]}
+                />
+                {/* hidden until hover on pointer devices; always visible on touch */}
+                <span class="absolute inset-0 flex items-center justify-center p-4 text-center text-2xl text-white bg-radial from-black/50 via-black/25 to-transparent transition-opacity duration-500 ease-out [@media(hover:hover)]:opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 motion-reduce:transition-none">
+                  {item.title}
+                </span>
+                {/* always visible, so the grid reads as a timeline; last child paints over the scrims */}
+                <span class="absolute inset-x-0 bottom-0 px-4 pb-3 pt-8 text-left uppercase tracking-widest text-xs text-white bg-linear-to-t from-black/85 via-black/45 to-transparent">
+                  {item.type} · {item.year}
+                </span>
+              </a>
+            ))}
           </section>
         ))
       }

@@ -91,3 +91,9 @@
   @apply clip-box duration-300 group-hover:bg-linear-to-r group-hover:bg-clip-text group-hover:text-transparent group-focus-visible:bg-linear-to-r group-focus-visible:bg-clip-text group-focus-visible:text-transparent;
 }
 @utility group-sweep-l { @apply group-sweep group-hover:bg-linear-to-l group-focus-visible:bg-linear-to-l; }
+
+/* a thumbnail leaning in when its ancestor `group` link is hovered or focused; still under
+   reduced motion. `scale-*` is the `scale` property in v4, so `transform-none` would not stop it. */
+@utility group-zoom {
+  @apply transition-transform duration-500 ease-out group-hover:scale-110 group-focus-visible:scale-110 motion-reduce:transition-none motion-reduce:group-hover:scale-100 motion-reduce:group-focus-visible:scale-100;
+}

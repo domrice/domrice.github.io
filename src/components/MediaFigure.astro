@@ -33,11 +33,9 @@ const caption = [
 ];
 ---
 
-{/* the figure wrapper owns grid placement so the credit can sit over the media:
-    portraits are boxed to 3:4 so a pair lines up; landscapes keep their own height across both columns */}
-<figure
-  class:list={["relative group", portrait ? "aspect-[3/4]" : "lg:col-span-2"]}
->
+{/* the figure wrapper owns grid placement so the credit can sit over the media;
+    the media reserves its own space from its width/height, landscapes across both columns */}
+<figure class:list={["relative group", !portrait && "lg:col-span-2"]}>
   {
     video ? (
       <MediaVideo
@@ -48,7 +46,7 @@ const caption = [
     ) : (
       <Picture
         {...picture}
-        src={still(src)}
+        {...still(src)}
         sizes={sizes}
         alt={alt || ""}
         class="rounded-md w-full h-full object-cover"
