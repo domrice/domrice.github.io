@@ -2,7 +2,7 @@
 title: Job Seek
 description: >-
   Job Seek collects Swiss job postings from boards and employer career pages into one local database and scores each one against a CV with a model that runs on the same machine.
-order: 2
+order: 3
 category: tools
 thumb: /imgs/2026-11_jobseek/js0_dr_thumb
 hero:

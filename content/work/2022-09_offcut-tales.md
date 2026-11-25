@@ -2,7 +2,7 @@
 title: Offcut Tales
 description: >-
   This thesis presents methods for upcycling and designing low-engineered free-form timber structure with offcuts—a waste material from timber production.
-order: 7
+order: 8
 category: tools
 thumb: /imgs/2022-09_offcut_tales/ot0_dr_thumb
 hero:

@@ -2,7 +2,7 @@
 title: compas.dev
 description: >-
   compas.dev is the new website of COMPAS, the open-source computational framework for research and collaboration in architecture, engineering, and construction.
-order: 5
+order: 6
 category: tools
 thumb: /imgs/2026-12_compas-dev/cd0_dr_thumb
 hero:

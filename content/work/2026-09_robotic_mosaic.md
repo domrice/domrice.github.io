@@ -2,7 +2,7 @@
 title: Robotic Mosaic
 description: >-
   Robotic Mosaic explores a material-led workflow for transforming irregular ceramic waste into bespoke mosaic surfaces.
-order: 4
+order: 5
 category: tools
 thumb: /imgs/2026-09_robotic_mosaic/rm0_dr_thumb
 hero:
@@ -11,7 +11,7 @@ hero:
   credit: Mosaic Façade Panel | Photo © Spyridon Pyrgiotis, Ioanna Tatouli
 media:
   - src: /video/2026-09_robotic_mosaic/rm6_dr.webm
-    alt: Video of ceramic fragments being detected on a table, then digitally packed into an S-shaped mosaic
+    alt: Video of ceramic fragments being detected on a table, then digitally packed into a square mosaic of a red disc above a dark wave
     credit: Tile Detection and Placement | Video © Dominik Reisach
   - src: /video/2026-09_robotic_mosaic/rm8_dr.webm
     alt: Video of the robot excavating and compacting the earth formwork

@@ -1,8 +1,8 @@
 ---
-title: Mosaic Designer
+title: Mosaic Designer I
 description: >-
-  Mosaic Designer packs ceramic fragments from a large inventory into collision-free mosaics on flat and curved surfaces.
-order: 1
+  Mosaic Designer I packs ceramic fragments from a large inventory into collision-free mosaics on flat and curved surfaces.
+order: 2
 category: tools
 thumb: /imgs/2026-10_mosaic-designer/md0_dr_thumb
 hero:
@@ -50,7 +50,7 @@ credits:
       - iPhone 14 Pro
 ---
 
-Two ceramic suppliers donated unsellable stock headed for landfill, 3,301 fragments in all. I digitized every one with an iPhone and computer vision. A stock that size is still small enough to handle in production without an inventory system. **Mosaic Designer** packs them into mosaics. It began as the packing algorithm in [Robotic Mosaic](/work/2026-09_robotic_mosaic), and I rebuilt it outside Rhino as a standalone system.
+Two ceramic suppliers donated unsellable stock headed for landfill, 3,301 fragments in all. I digitized every one with an iPhone and computer vision. A stock that size is still small enough to handle in production without an inventory system. **Mosaic Designer I** packs them into mosaics. It began as the packing algorithm in [Robotic Mosaic](/work/2026-09_robotic_mosaic), and I rebuilt it outside Rhino as a standalone system.
 
 The design arrives as fields on a voxel grid that assign fragments to color regions, bound their size where the surface curves, and set their orientation. With a fixed stock, the fragment that fits a gap and the one the design asks for often differ, and Mosaic Designer has to weigh both. Robotic Mosaic placed every fragment uncut. Where whole fragments leave gaps, Mosaic Designer now fills them with pieces it plans to cut from unused ones. Trencadís, the Catalan mosaic technique, makes the same cut by hand.
 

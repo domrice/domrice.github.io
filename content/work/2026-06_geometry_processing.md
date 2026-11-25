@@ -2,7 +2,7 @@
 title: Geometry Processing
 description: >-
   The foundations of digital geometry processing, implemented in C++: subdivision, surface reconstruction, parameterization, deformation, and skinning.
-order: 6
+order: 7
 category: tools
 thumb: /imgs/2026-06_geometry_processing/gp00_dr_thumb
 hero:

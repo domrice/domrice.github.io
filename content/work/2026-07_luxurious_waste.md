@@ -2,7 +2,7 @@
 title: Luxurious Waste
 description: >-
   Luxurious Waste upcycles marble offcuts from the natural stone industry into stable, robotically stacked walls.
-order: 3
+order: 4
 category: tools
 thumb: /imgs/2026-07_luxurious_waste/lw0_dr_thumb
 hero:
